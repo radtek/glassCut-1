@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3B8A8D47-1988-4FD9-9304-6A9B761CB4E6}</ProjectGuid>
+    <RootNamespace>Lasaw</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="环境变量.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="环境变量.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>msdasc.lib;gts.lib;AdvDXFReader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>msdasc.lib;gts.lib;AdvDXFReader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CalibrationDlg.h" />
+    <ClInclude Include="DxfDlg.h" />
+    <ClInclude Include="DxfLocus.h" />
+    <ClInclude Include="GgMotion.h" />
+    <ClInclude Include="HomeProcessDlg.h" />
+    <ClInclude Include="ImageView.h" />
+    <ClInclude Include="Include\CommonCamera.h" />
+    <ClInclude Include="Include\CustomStatusBar.h" />
+    <ClInclude Include="Include\GridCtrl_src\CellRange.h" />
+    <ClInclude Include="Include\GridCtrl_src\GridCell.h" />
+    <ClInclude Include="Include\GridCtrl_src\GridCellBase.h" />
+    <ClInclude Include="Include\GridCtrl_src\GridCtrl.h" />
+    <ClInclude Include="Include\GridCtrl_src\GridDropTarget.h" />
+    <ClInclude Include="Include\GridCtrl_src\InPlaceEdit.h" />
+    <ClInclude Include="Include\GridCtrl_src\MemDC.h" />
+    <ClInclude Include="Include\GridCtrl_src\TitleTip.h" />
+    <ClInclude Include="Include\json\json-forwards.h" />
+    <ClInclude Include="Include\json\json.h" />
+    <ClInclude Include="Include\Label.h" />
+    <ClInclude Include="Include\MiddleSplitter.h" />
+    <ClInclude Include="Include\NewCellTypes\GridCellCheck.h" />
+    <ClInclude Include="Include\NewCellTypes\GridCellCombo.h" />
+    <ClInclude Include="Include\NewCellTypes\GridCellDateTime.h" />
+    <ClInclude Include="Include\NewCellTypes\GridCellNumeric.h" />
+    <ClInclude Include="Include\NewCellTypes\GridURLCell.h" />
+    <ClInclude Include="Include\nimachinevision.h" />
+    <ClInclude Include="Include\SerialPort.h" />
+    <ClInclude Include="Include\StopWatch.h" />
+    <ClInclude Include="IOStatusDlg.h" />
+    <ClInclude Include="Lasaw.h" />
+    <ClInclude Include="LasawDoc.h" />
+    <ClInclude Include="LasawView.h" />
+    <ClInclude Include="LogHelper.h" />
+    <ClInclude Include="LoginDlg.h" />
+    <ClInclude Include="MachineParam.h" />
+    <ClInclude Include="MainCtrlDlg.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MotionDlg.h" />
+    <ClInclude Include="MultiLineHeaderGridCtrl.h" />
+    <ClInclude Include="MyChain.h" />
+    <ClInclude Include="MyDialogBar.h" />
+    <ClInclude Include="NiVisionCtl.h" />
+    <ClInclude Include="OptionsViewDlg.h" />
+    <ClInclude Include="PaneSettingsDlg.h" />
+    <ClInclude Include="ProjectSettingDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="VisionCtrlView.h" />
+    <ClInclude Include="WaiteProcessDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CalibrationDlg.cpp" />
+    <ClCompile Include="DxfDlg.cpp" />
+    <ClCompile Include="DxfLocus.cpp" />
+    <ClCompile Include="ErrorInfoDlg.cpp" />
+    <ClCompile Include="GgMotion.cpp" />
+    <ClCompile Include="HomeProcessDlg.cpp" />
+    <ClCompile Include="ImageView.cpp" />
+    <ClCompile Include="Include\CommonCamera.cpp" />
+    <ClCompile Include="Include\CustomStatusBar.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\GridCell.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\GridCellBase.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\GridCtrl.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\GridDropTarget.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\InPlaceEdit.cpp" />
+    <ClCompile Include="Include\GridCtrl_src\TitleTip.cpp" />
+    <ClCompile Include="Include\jsoncpp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Include\Label.cpp" />
+    <ClCompile Include="Include\MiddleSplitter.cpp" />
+    <ClCompile Include="Include\NewCellTypes\GridCellCheck.cpp" />
+    <ClCompile Include="Include\NewCellTypes\GridCellCombo.cpp" />
+    <ClCompile Include="Include\NewCellTypes\GridCellDateTime.cpp" />
+    <ClCompile Include="Include\NewCellTypes\GridCellNumeric.cpp" />
+    <ClCompile Include="Include\NewCellTypes\GridURLCell.cpp" />
+    <ClCompile Include="Include\NIMachineVision.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Include\SerialPort.cpp" />
+    <ClCompile Include="Include\StopWatch.cpp" />
+    <ClCompile Include="IOStatusDlg.cpp" />
+    <ClCompile Include="Lasaw.cpp" />
+    <ClCompile Include="LasawDoc.cpp" />
+    <ClCompile Include="LasawView.cpp" />
+    <ClCompile Include="LogHelper.cpp" />
+    <ClCompile Include="LoginDlg.cpp" />
+    <ClCompile Include="MachineParam.cpp" />
+    <ClCompile Include="MainCtrlDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MotionDlg.cpp" />
+    <ClCompile Include="MultiLineHeaderGridCtrl.cpp" />
+    <ClCompile Include="MyChain.cpp" />
+    <ClCompile Include="MyDialogBar.cpp" />
+    <ClCompile Include="NiVisionCtl.cpp" />
+    <ClCompile Include="OptionsViewDlg.cpp" />
+    <ClCompile Include="PaneSettingsDlg.cpp" />
+    <ClCompile Include="ProjectSettingDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="VisionCtrlView.cpp" />
+    <ClCompile Include="WaiteProcessDlg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Lasaw.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource.hm" />
+    <None Include="res\Lasaw.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\coord1.bmp" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\icon_coordinary.ico" />
+    <Image Include="res\Lasaw.ico" />
+    <Image Include="res\LasawDoc.ico" />
+    <Image Include="res\ledHigh.bmp" />
+    <Image Include="res\ledLow.bmp" />
+    <Image Include="res\pan.ico" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\zoom.ico" />
+    <Image Include="res\zoomin.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Lasaw.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

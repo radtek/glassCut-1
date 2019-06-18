@@ -35,4 +35,5 @@ public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnUpdateBtnUI(CCmdUI *pCmdUI);
 	afx_msg void OnBnClickedButtonZoom();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

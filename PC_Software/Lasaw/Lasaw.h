@@ -198,10 +198,10 @@ public:
 	void	ResetProcess();
 	void	SetStop(BOOL bState, BOOL bNeedReset = 0);
 	BOOL	GoPosition(UINT nPos, BOOL bWait = TRUE);
-	int		WaitMotionDone(DWORD dwMilliseconds = 5000);
-	BOOL	AddedPointMove(const TrackPoint &lpPoint, BOOL bStart = FALSE, BOOL bWaitDone = FALSE, UINT nWaitTime = 5000);
-	BOOL	AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart = FALSE, BOOL bWaitDone = FALSE, UINT nWaitTime = 50000);
-	BOOL	LaserOut(BOOL bOnOff = FALSE, BYTE bBufCtrlMode = TRUE, double dPower = 0);
+	int		WaitMotionDone(DWORD dwMilliseconds = 10000);
+	BOOL	AddedPointMove(const TrackPoint &lpPoint, BOOL bStart = FALSE, BOOL bWaitDone = FALSE, UINT nWaitTime = 50000);
+	BOOL	AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart = FALSE, BOOL bWaitDone = FALSE, UINT nWaitTime = 150000);
+	BOOL	LaserOut(BOOL bOnOff, BYTE bBufCtrlMode, double dPower);
 	BOOL	LaserTestOut( double dPower = 2);
 	BOOL	TransformPane(std::vector<LPnode> &tdst, const std::vector<LPnode> &tTracks, TransformCoordinate &trans);
 	//************************************

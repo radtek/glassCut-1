@@ -131,7 +131,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	CRect ClientRc; GetClientRect(ClientRc);
 	m_frmSplitterWnd.CreateStatic(this, 1, 2, WS_CHILD | WS_VISIBLE | WS_BORDER);
 	m_frmSplitterWnd.SetColumnInfo(0, 340, 10);
-	m_frmSplitterWnd.SetColumnInfo(1, 940, 10);
+	m_frmSplitterWnd.SetColumnInfo(1, 1580, 10);
 	// 
 	if (m_leftSplitterWnd.CreateStatic(&m_frmSplitterWnd, 2, 1, WS_CHILD | WS_VISIBLE, m_frmSplitterWnd.IdFromRowCol(0, 0)) == NULL)
 		return FALSE;
@@ -140,9 +140,9 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	m_leftSplitterWnd.SetRowInfo(0, ClientRc.Height(), 10);
 	if (m_rightSplitterWnd.CreateStatic(&m_frmSplitterWnd, 2, 1, WS_CHILD | WS_VISIBLE, m_frmSplitterWnd.IdFromRowCol(0, 1)) == NULL)
 		return FALSE;
-	m_rightSplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CImageView), CSize(940, 512), pContext);
-	m_rightSplitterWnd.CreateView(1, 0, RUNTIME_CLASS(COptionsViewDlg), CSize(940, 300), pContext);
-	m_rightSplitterWnd.SetRowInfo(0, 480, 10);
+	m_rightSplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CImageView), CSize(1580, 640), pContext);
+	m_rightSplitterWnd.CreateView(1, 0, RUNTIME_CLASS(COptionsViewDlg), CSize(1580, 340), pContext);
+	m_rightSplitterWnd.SetRowInfo(0, 640, 10);
 
 	m_pMainDlg = (CMainCtrlDlg*)m_leftSplitterWnd.GetPane(0, 0);
 	m_pMotionDlg = (CMotionDlg*)m_leftSplitterWnd.GetPane(1, 0);
@@ -409,6 +409,7 @@ void CMainFrame::OnOperationMode(UINT idCtl)
 			{
 				theApp.m_bOnline = TRUE;
 				theApp.m_nCurrentRunMode = 0x04 + (theApp.m_nCurrentRunMode & 0x01);
+				theApp.m_GgMotion.SetOutput(theApp.m_cParam.Ou_ExtOnline + 1, TRUE);//offline
 			}
 		}
 		break;
@@ -504,7 +505,6 @@ LRESULT CMainFrame::OnIochange(WPARAM wParam, LPARAM lParam)
 					{
 						if (theApp.m_bWaitforTrigger)
 						{
-							theApp.m_GgMotion.SetOutput(theApp.m_cParam.Ou_ExtCircleDone + 1, FALSE);
 							PulseEvent(theApp.m_hOneCycleStart);
 						}
 						theApp.m_GgMotion.EnableInputCounter(theApp.m_cParam.In_ExtStart + 1);

@@ -230,7 +230,7 @@ BOOL CLasawApp::InitialDefine()
 	m_nCurrentPane[0] = 0;//
 	m_nCurrentPane[1] = 0;//
 	m_bOnline = FALSE;
-	m_bSortingDir = 0x07;
+	m_bSortingDir = 0x09;
 	m_nCurrentCameraID = 0;
 	m_nPanePosture = 0;
 
@@ -740,7 +740,14 @@ BOOL CLasawApp::AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart, BOOL bW
 		AddedErrorMsg(ErrMsg);
 		return !bSuccess;
 	}
-	m_GgMotion.SetBufLaserMode(0, m_cParam.PrjCfg.fLaser2VelRatio);
+		if (m_cParam.nlaserMode)
+		{
+			m_GgMotion.SetBufLaserMode(0, FALSE, m_cParam.PrjCfg.fPWMfrequency);
+		} 
+		else
+		{
+			m_GgMotion.SetBufLaserMode(0, TRUE, m_cParam.PrjCfg.fLaser2VelRatio / 2);
+		}
 
 	DWORD dEvent(0);
 	for (i = 0; i < nCount && bSuccess; i++)
@@ -748,7 +755,9 @@ BOOL CLasawApp::AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart, BOOL bW
 		LPnode &pt = tTracks.at(i);
 		bArcPt = pt.uType>>1;
 		if (!pt.bLaserOn)
-			LaserOut(FALSE);
+		{
+			LaserOut(FALSE, TRUE, 0);
+		}
 		if (i == 0 )//段落开始位
 		{
 			if (bArcPt)//曲线
@@ -768,12 +777,12 @@ BOOL CLasawApp::AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart, BOOL bW
 		else
 		{
 			if (pt.bLaserOn)
-				LaserOut(TRUE);
+				LaserOut(TRUE, TRUE, m_cParam.PrjCfg.fPWMfrequency);
 		}
 		bSuccess = AddedPointMove(pt);
 	}
 	//轨迹终点处停止出光
-	LaserOut(FALSE);
+	LaserOut(FALSE, TRUE, 0);
 	if (bStart&&bSuccess)
 	{
 		bSuccess = m_GgMotion.RuninMove();
@@ -801,8 +810,8 @@ BOOL CLasawApp::AddedTrackMove(std::vector<LPnode> tTracks, BOOL bStart, BOOL bW
 				AddedErrorMsg(ErrMsg);
 				break;
 			}
-// 			LaserOut(FALSE,FALSE);
 			m_GgMotion.AxStop(ALL_AXES);
+ 			LaserOut(FALSE,FALSE,0);
 
 		}
 		else{
@@ -821,14 +830,17 @@ BOOL CLasawApp::LaserOut(BOOL bOnOff /*= FALSE*/, BYTE bBufCtrlMode, double dPow
 		return TRUE;
 	if (bOnOff)
 		m_GgMotion.SetDA(nchn, m_cParam.PrjCfg.fPower / 10);
-	else
-		m_GgMotion.SetDA(nchn, 0);
 	if (!bBufCtrlMode)
 	{
+		if (!bOnOff)
+			m_GgMotion.SetDA(nchn, 0);
 		bSuccess = m_GgMotion.SetDirectLaserOut(nchn, bOnOff, dPower);
 	}
 	else
-		bSuccess = m_GgMotion.Buf_LaserOut(nchn, bOnOff);
+	{
+
+		bSuccess = m_GgMotion.Buf_LaserOut(nchn, bOnOff, m_cParam.nlaserMode, dPower);
+	}
 	return bSuccess;
 }
 
@@ -854,8 +866,13 @@ BOOL CLasawApp::TransformPane(std::vector<LPnode> &tdst, const std::vector<LPnod
 				ResultMatrix[m] += bMatrix[inner] * aMatrix[inner][m];
 			}
 		}
+		tdst.at(i).bLaserOn = tTracks.at(i).bLaserOn;
+		tdst.at(i).uType = tTracks.at(i).uType;
+		tdst.at(i).nDir = tTracks.at(i).nDir;
 		tdst.at(i).EndPoint[0] = ResultMatrix[0];
 		tdst.at(i).EndPoint[1] = ResultMatrix[1];
+		tdst.at(i).Vel = tTracks.at(i).Vel;
+		tdst.at(i).ACC = tTracks.at(i).ACC;
 		//辅助点变换
 		if (tTracks.at(i).uType >> 1)
 		{
@@ -1201,6 +1218,7 @@ BOOL CLasawApp::StartSlaveThread(UINT nIndex)
 
 UINT _cdecl CLasawApp::SlaveThread(LPVOID lpParam)
 {
+	theApp.m_bSalveThreadAlive = TRUE;
 	LuckyBag* pOperateOrder = (LuckyBag*)lpParam;
 	CMainFrame* pFrame = (CMainFrame*)(theApp.m_pMainWnd);
 	UINT nCMD = pOperateOrder->nIndex[0];
@@ -1238,7 +1256,8 @@ UINT _cdecl CLasawApp::SlaveThread(LPVOID lpParam)
 				if (0x02 == (theApp.m_nCurrentRunMode >> 1))//联机自动模式
 				{
 					theApp.m_nCurrentPane[0] = theApp.m_GgMotion.m_bInput[theApp.m_cParam.In_TrayIndex];
-					theApp.m_nPanePosture = theApp.m_GgMotion.m_bInput[theApp.m_cParam.In_PanePosture];
+					theApp.m_nPanePosture = theApp.m_GgMotion.m_bInput[theApp.m_cParam.In_PanePosture[theApp.m_nCurrentPane[0]]];
+					theApp.m_GgMotion.SetOutput(theApp.m_cParam.Ou_ExtCircleDone + 1, FALSE);
 				}
 				theApp.m_CircleWatch.Start();
 				SetEvent(theApp.m_hProcessEvent[START_DONE]);
@@ -1402,7 +1421,10 @@ BOOL CLasawApp::SettleProcess(Image* &Img, UINT nIndex)
 	}
 	else
 	{
-		m_dProductResult.at(nIndex).resultState = VISION_FAIL;
+		if (theApp.m_cParam.nDemoMode)
+			m_dProductResult.at(nIndex).resultState = VISION_OK;
+		else
+			m_dProductResult.at(nIndex).resultState = VISION_FAIL;
 		OnUpdateSts( nIndex, VISION_FAIL << 1, ADD_STS);
 		str.Format(_T("产品%d图像定位失败\r\n"), nIndex + 1);
 		AddedProcessMsg(str);
@@ -1426,7 +1448,7 @@ void CLasawApp::SetStop(BOOL bState, BOOL bNeedReset /*= 0*/)
 {
 	if (bState)
 	{
-		LaserOut(FALSE,FALSE);
+		LaserOut(FALSE,FALSE,0);
 		m_GgMotion.AxStop();
 		ResetEvent(m_hOneCycleStart);
 		theApp.m_bOnline = FALSE;
@@ -1837,12 +1859,14 @@ BOOL CLasawApp::CuttingProcess(/*UINT nIndex*/)
 		Msg.Format(_T("产品%d开始切片\r\n"), nIndex + 1);
 		AddedProcessMsg(Msg);
 		bSuccess = AddedTrackMove(m_CtActline.at(m_nCurrentPane[1]).Tlline, TRUE);
+		Sleep(100);
 		if (bSuccess)
 		{
 			//计算下一片
 			if ((m_nCurrentPane[1] < 3) && m_bAutoThreadAlive)
 			{
 				CuttingPrepareProcess(nIndex + 1, m_nPanePosture);
+				Sleep(10);
 			}
 			//等待当前片完成
 			bSuccess = FALSE;

@@ -24,9 +24,10 @@ CMachineParam::CMachineParam()
 	In_Homed[1] = 1;
 	In_EmgStop = 2;
 	In_TrayIndex = 5;
-	In_PanePosture = 6;
-	In_ExtStart = 7;//
-	In_ExtStop = 8;//
+	In_PanePosture[0] = 6;
+	In_PanePosture[1] = 7;
+	In_ExtStart = 8;//
+	In_ExtStop = 9;//
 	//-Output
 	Ou_HomeTrigger[0] = 0;
 	Ou_HomeTrigger[1] = 1;
@@ -34,6 +35,8 @@ CMachineParam::CMachineParam()
 	Ou_ExtAlarm = 6;
 	Ou_ExtOnline =7;//空闲
 
+	nlaserMode = 0;
+	nDemoMode = 0;
 	fProportion = 1;
 	nMin_Angle = 1;
 	nSpline_Step = 10;
@@ -163,8 +166,8 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 	CStringA filestr;
 	CStringA str;
 	const CStringA	IOString[2][16] = { 
-		"X轴复位完成", "Y轴复位完成", "急停按钮", "外控暂停","外控模式", "外控停止","外控启动","面板翻面", 
-		"夹具序号", "状态1", "状态2", "状态3", "状态4", "ReserveI13", "ReserveI14", "ReserveI15",
+		"X轴复位完成", "Y轴复位完成", "急停按钮", "外控暂停","外控模式", "外控停止","外控启动","1面板翻面", 
+		"夹具序号", "2面板翻面", "状态2", "状态3", "状态4", "ReserveI13", "ReserveI14", "ReserveI15",
 		//OUT
 		"X轴复位触发", "Y轴复位触发", "设备上线",	"周期做货完成","报警输出","动作1", "动作2", "动作3","动作4",
 		"ReserveO9", "ReserveO10", "ReserveO11", "ReserveO12", "ReserveO13", "ReserveO14", "ReserveO15",
@@ -184,6 +187,7 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 		if (!root["状态信息"].isNull())
 		{
 			nlQuantity = root["状态信息"]["当前产量"].asUInt();
+			nDemoMode = root["状态信息"]["演示模式"].asUInt();
 		}
 		if (!root["通讯端口"].isNull())
 		{
@@ -203,7 +207,8 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 			else
 				DefaultProjectName = root["配置信息"]["默认项目"].asCString();
 			nMirror = root["配置信息"]["图像翻转"].asUInt();
-			dCCD_Nozzle[0][0] = int(root["配置信息"]["CCD_1偏移X"].asDouble()*10000)/10000.0;
+			nlaserMode = root["配置信息"]["激光模式"].asUInt();
+			dCCD_Nozzle[0][0] = int(root["配置信息"]["CCD_1偏移X"].asDouble() * 10000) / 10000.0;
 			dCCD_Nozzle[0][1] = int(root["配置信息"]["CCD_1偏移Y"].asDouble() * 10000) / 10000.0;
 			dCCD_Nozzle[1][0] = int(root["配置信息"]["CCD_2偏移X"].asDouble() * 10000) / 10000.0;
 			dCCD_Nozzle[1][1] = int(root["配置信息"]["CCD_2偏移Y"].asDouble() * 10000) / 10000.0;
@@ -244,7 +249,8 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 			In_EmgStop = root["输入"][IOString[0][2]].asUInt();
 			In_ExtStop = root["输入"][IOString[0][5]].asUInt();
 			In_ExtStart = root["输入"][IOString[0][6]].asUInt();
-			In_PanePosture = root["输入"][IOString[0][7]].asUInt();
+			In_PanePosture[0] = root["输入"][IOString[0][7]].asUInt();
+			In_PanePosture[1] = root["输入"][IOString[0][9]].asUInt();
 			In_TrayIndex = root["输入"][IOString[0][8]].asUInt();
 		}
 		//-Output
@@ -274,6 +280,7 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 		Json::Value dxfItem;
 
 		StatusItem["当前产量"] = nlQuantity;
+		StatusItem["演示模式"] = nDemoMode;
 		root["状态信息"] = StatusItem;
 
 		PortItem["光源控制口"] = nComPort[0];
@@ -287,6 +294,7 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 
 		MainItem["默认项目"] = (LPCSTR)CStringA(DefaultProjectName);
 		MainItem["图像翻转"] = nMirror;
+		MainItem["激光模式"] = nlaserMode;
 		MainItem["CCD_1偏移X"] = dCCD_Nozzle[0][0];
 		MainItem["CCD_1偏移Y"] = dCCD_Nozzle[0][1];
 		MainItem["CCD_2偏移X"] = dCCD_Nozzle[1][0];
@@ -334,7 +342,8 @@ BOOL CMachineParam::LoadParameter(CString strFileName,BOOL bLoadSave)
 		InputItem[IOString[0][2]] = In_EmgStop;
 		InputItem[IOString[0][5]] = In_ExtStop;
 		InputItem[IOString[0][6]] = In_ExtStart;
-		InputItem[IOString[0][7]] = In_PanePosture;
+		InputItem[IOString[0][7]] = In_PanePosture[0];
+		InputItem[IOString[0][9]] = In_PanePosture[1];
 		InputItem[IOString[0][8]] = In_TrayIndex;
 		root["输入"] = InputItem;
 

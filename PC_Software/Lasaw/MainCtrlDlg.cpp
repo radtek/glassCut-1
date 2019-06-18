@@ -402,6 +402,23 @@ void CMainCtrlDlg::Typesetting(BYTE nRow, BYTE nCol)
 					}
 				}
 				break;
+			case 4:
+				/********/
+				/* 987  */
+				/* 654  */
+				/* 321  */
+				/********/
+				for (int i = 0; i < nRow; i++)
+				{
+					nStart = rc[0].top + (nRow - i - 1)*nRowstep;
+					for (int j = 0; j < nCol; j++)
+					{
+						rc[1].MoveToXY(rc[0].left + nColstep*(nCol - j - 1), nStart);
+						m_plStatus.at(i*nCol + j)->MoveWindow(rc[1]);
+					}
+				}
+				break;
+
 			}
 		}
 		else

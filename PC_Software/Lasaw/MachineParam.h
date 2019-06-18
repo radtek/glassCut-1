@@ -72,8 +72,8 @@ public:
 	BYTE			In_Homed[2];//1、2 - 回零完成
 	BYTE			In_EmgStop;//3
 	BYTE			In_ExtStop;//4
-	BYTE			In_ExtStart;// 7 外控启动
-	BYTE			In_PanePosture;//6 - 面板正反
+	BYTE			In_ExtStart;// 8 外控启动
+	BYTE			In_PanePosture[2];//6/7 - 前后面板正反
 	BYTE			In_TrayIndex;//5 - 面板位置
 
 	//0--Output
@@ -85,6 +85,8 @@ public:
 // 	BYTE			Ou_Tower_yellowlamp;
 // 	BYTE			Ou_Tower_Greenlamp;
 	//
+	BYTE			nDemoMode;
+	BYTE			nlaserMode;
 	BYTE			nMirror;
 	BYTE			nComPort[2];
 	USHORT			uDelayTime[2];//开关光延时

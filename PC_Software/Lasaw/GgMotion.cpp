@@ -700,8 +700,13 @@ BOOL CGgMotion::GetRuninMoveDone(USHORT nBuffer/*=0*/)
 			SetEvent(m_hCrdMotionDone);
 			TRACE1("---------------->%dDone\n",lSegment);
 			GT_CrdClear(m_nCardID,m_nCrd,nBuffer);
-		}else
+		}
+		else
+		{
 			ResetEvent(m_hCrdMotionDone);
+			TRACE("---------------->Reset m_hCrdMotionDone\n");
+
+		}
 	}	
 	return !sRun;
 }
@@ -1219,7 +1224,7 @@ BOOL CGgMotion::SetDirectLaserOut(UINT nIndex, BOOL bOnoff, double dPower)
 	short nResult(0);
 	if (bOnoff)
 	{
-		nResult = GT_LaserPowerMode(m_nCardID, 1, 24, 0, nIndex, 0); // 设置激光能量控制方式为频率输出,高分辨模式
+		nResult = GT_LaserPowerMode(m_nCardID, 1, 96, 0, nIndex, 0); // 设置激光能量控制方式为频率输出,高分辨模式
 		// 最高 96kHz，最小 0kHz
 		nResult = GT_SetPulseWidth(m_nCardID, 35, nIndex); // 设置脉宽为：6μs
 		nResult = GT_LaserPrfCmd(m_nCardID, dPower, nIndex); // 设置输出频率为 20KHz
@@ -1228,14 +1233,22 @@ BOOL CGgMotion::SetDirectLaserOut(UINT nIndex, BOOL bOnoff, double dPower)
 	return nResult;
 }
 
-BOOL CGgMotion::SetBufLaserMode(UINT nIndex, double dRatio)
+BOOL CGgMotion::SetBufLaserMode(UINT nIndex, BYTE bFollow,  double dRatio)
 {
 	short nResult(0);
-	nResult = GT_LaserPowerMode(m_nCardID, 1, 24, 0, nIndex, 0); // 设置激光能量控制方式为频率输出,高分辨模式
+	nResult = GT_LaserPowerMode(m_nCardID, 1, 96, 0, nIndex, 0); // 设置激光能量控制方式为频率输出,高分辨模式
 	// 最高 96kHz，最小 0kHz
 	nResult = GT_SetPulseWidth(m_nCardID, 13, nIndex); // 设置脉宽为：8μs
-	nResult = GT_BufLaserFollowMode(m_nCardID, m_nCrd, 1,0,nIndex); //设置能量跟随编码器实际速度
-	nResult = GT_BufLaserFollowRatio(m_nCardID, m_nCrd, dRatio, 0, 24, 0, nIndex); // 设置跟随的比率
+	if (bFollow)
+	{
+		nResult = GT_BufLaserFollowMode(m_nCardID, m_nCrd, 1, 0, nIndex); //设置能量跟随编码器实际速度
+		nResult = GT_BufLaserFollowRatio(m_nCardID, m_nCrd, dRatio, 0, 96, 0, nIndex); // 设置跟随的比率
+	}
+	else
+	{
+		nResult = GT_BufLaserPrfCmd(m_nCardID, m_nCrd, dRatio, 0, nIndex); // 设置直接输出频率为 20KHz
+
+	}
 	return nResult;
 }
 
@@ -1246,6 +1259,7 @@ BOOL CGgMotion::Buf_LaserOut(UINT nIndex, BOOL bOnoff, BYTE bMode, double dPower
 	{
 		nResult = GT_BufLaserPrfCmd(m_nCardID, m_nCrd, dPower, 0, nIndex); // 设置直接输出频率为 20KHz
 	}
+	GT_BufDelay(m_nCardID, m_nCrd, 1);
 	if (bOnoff)
 		nResult = GT_BufLaserOn(m_nCardID, m_nCrd, 0,nIndex);
 	else

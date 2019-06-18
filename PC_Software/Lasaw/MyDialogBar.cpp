@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CMyDialogBar, CDialogBar)
 	ON_BN_CLICKED(ID_MENUBUTTON_USER, &CMyDialogBar::OnBnClickedMenubuttonUser)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(ID_BUTTON_ZOOM, &CMyDialogBar::OnBnClickedButtonZoom)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 LRESULT CMyDialogBar::OnInitDialog(UINT wParam, LONG lParam)
@@ -137,7 +138,7 @@ BOOL CMyDialogBar::Create(CWnd* pParentWnd, UINT nIDTemplate,
 {
 	if (!CDialogBar::Create(pParentWnd, nIDTemplate, nStyle, nID))
 		return FALSE;
-	m_sizeDefault.cx = 1280;
+	m_sizeDefault.cx = 1920;
 	m_bChangeDockedSize = bChange;
 	m_sizeFloating = m_sizeDocked = m_sizeDefault;
 	return TRUE;
@@ -188,4 +189,12 @@ void CMyDialogBar::OnBnClickedButtonZoom()
 	theApp.m_NiVision.EnableZoomDisplay(0xff, m_bAutoZoom);
 	m_bAutoZoom = !m_bAutoZoom;
 	SetDlgItemText(ID_BUTTON_ZOOM, btntext[m_bAutoZoom]);
+}
+
+
+void CMyDialogBar::OnSize(UINT nType, int cx, int cy)
+{
+	CDialogBar::OnSize(nType, cx, cy);
+
+	// TODO:  在此处添加消息处理程序代码
 }

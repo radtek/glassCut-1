@@ -132,7 +132,7 @@ public:
 	BOOL RuninMove(BOOL bStart=TRUE);
 	BOOL GetRuninMoveDone(USHORT nBuffer=0);
 	BOOL SetDirectLaserOut(UINT nIndex, BOOL bOnoff,double dPower);//起始位为1
-	BOOL SetBufLaserMode(UINT nIndex, double dRatio);//起始位为1
+	BOOL SetBufLaserMode(UINT nIndex, BYTE bFollow,double dRatio);//起始位为1
 	BOOL Buf_LaserOut(UINT nIndex, BOOL bOnoff,BYTE bMode=0, double dPower=0);//起始位为1
 	BOOL Buf_SetOutput(UINT nIndex, BOOL bOnoff);//起始位为1
 	BOOL Buf_SetDelay(USHORT nTime);//起始位为1

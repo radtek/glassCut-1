@@ -657,7 +657,7 @@ void CProjectSettingDlg::OnBnClickedButtonCancel()
 
 	PostMessage(WM_USER_UPDATEUI, 6, 0);
 	PostMessage(WM_USER_UPDATEUI, 2, 0);
-	theApp.LaserOut(FALSE,FALSE);
+	theApp.LaserOut(FALSE,FALSE,0);
 }
 
 
